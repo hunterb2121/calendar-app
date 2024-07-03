@@ -1,3 +1,7 @@
+from utils.db import execute_query, get_all_results, get_one_result
+from datetime import datetime
+
+
 """
 User Model
 Purpose: Make interactions with users in the database easier
@@ -18,8 +22,8 @@ class User:
     
     @id.setter
     def id(self, new_id):
+        execute_query('UPDATE users SET id = ? WHERE id = ?', [new_id, self.id])
         self._id = new_id
-        # update db id
 
     @property
     def username(self):
@@ -27,8 +31,8 @@ class User:
     
     @username.setter
     def username(self, new_username):
+        execute_query('UPDATE users SET username = ? WHERE id = ?', [new_username, self.id])
         self._username = new_username
-        # update db username
 
     @property
     def email(self):
@@ -36,8 +40,8 @@ class User:
     
     @email.setter
     def email(self, new_email):
+        execute_query('UPDATE users SET email = ? WHERE id = ?', [new_email, self.id])
         self._email = new_email
-        # update db email
 
     @property
     def password_hash(self):
@@ -45,6 +49,7 @@ class User:
     
     @password_hash.setter
     def password_hash(self, new_hash):
+        execute_query('UPDATE users SET password_had = ? WHERE id = ?', [new_hash, self.id])
         self._password_hash = new_hash
         # update db password_hash
 
@@ -57,32 +62,32 @@ class User:
         self._created_date = new_created_date
 
     @staticmethod
-    def create_user():
-        ...
+    def create_user(username, email, password_hash):
+        execute_query('INSERT INTO users (username, email, password_hash, created_date) VALUES (?, ?, ?, ?)', [username, email, password_hash, datetime.now()])
 
     @staticmethod
-    def get_user_by_id():
-        ...
+    def get_user_by_id(user_id):
+        get_one_result('SELECT * FROM users WHERE id = ?', user_id)
 
     @staticmethod
-    def get_user_by_username():
-        ...
+    def get_user_by_username(username):
+        get_one_result('SELECT * FROM users WHERE username = ?', username)
 
     @staticmethod
-    def get_user_by_email():
-        ...
+    def get_user_by_email(email):
+        get_one_result('SELECT * FROM users WHERE email = ?', email)
 
     @staticmethod
-    def delete_user_by_id():
-        ...
+    def delete_user_by_id(user_id):
+        execute_query('DELETE FROM users WHERE id = ?', user_id)
 
     @staticmethod
-    def delete_user_by_username():
-        ...
+    def delete_user_by_username(username):
+        execute_query('DELETE FROM users WHERE username = ?', username)
 
     @staticmethod
-    def delete_user_by_email():
-        ...
+    def delete_user_by_email(email):
+        execute_query('DELETE FROM users WHERE email = ?', email)
 
 
 """
